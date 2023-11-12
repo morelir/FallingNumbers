@@ -10,7 +10,7 @@ function loadGame() {
     "Numbers will fall... if you have a keyboard (preferably with a numpad), press the correct keys to knock them away before they hit the ground";
   main.appendChild(rules);
   button.addEventListener("click", function startIt(e) {
-    document.querySelector(".start-game").classList.add("indeed")
+    document.querySelector(".start-game").classList.add("indeed");
     main.textContent = "";
     playGame();
   });
@@ -74,7 +74,6 @@ function playGame(replay) {
     draggable.style.backgroundSize = "100px 100px";
     draggable.style.zIndex = "1";
     draggable.style.cursor = "grab";
- 
 
     main.appendChild(draggable);
 
@@ -236,24 +235,18 @@ function playGame(replay) {
     //Could use Web Animations API here, but showing how you can use a mix of Web Animations API and CSS transistions
     // document.body.removeEventListener('keypress', onPress);
     // oscillator.stop(0);
-    document.querySelector(".game-over").classList.add("indeed");
 
-    var button = document.createElement("button");
-    button.textContent = "Start Again";
-    var div = document.querySelector(".game-over");
-    div.appendChild(button);
-    
-    button.addEventListener("click",function(){
-      const main = document.querySelector("#main");
-      // main.textContent="";
-      while (main.firstChild) {
-        console.log(1)
-        main.removeChild(main.lastChild);
-      }
-      document.querySelector(".game-over").classList.remove("indeed");
+    document.querySelector(".game-over").classList.add("indeed");
+    main.textContent = "";
+
+    const button = querySelector(".game-over button");
+    button.addEventListener("click", function (e) {
+
+      const main = document.getElementById("main");
       
+      document.querySelector(".game-over").classList.remove("indeed");
       playGame();
-    })
+    });
   }
 
   //Periodically remove missed elements, and lower the interval between falling elements
