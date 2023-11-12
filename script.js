@@ -239,7 +239,8 @@ function playGame(replay) {
     document.querySelector(".game-over").classList.add("indeed");
     main.textContent = "";
 
-    const button = querySelector(".game-over button");
+    const button = document.querySelector(".game-over > button");
+    console.log(button.textContent)
     button.addEventListener("click", function (e) {
 
       const main = document.getElementById("main");
