@@ -16,6 +16,11 @@ function loadGame() {
   });
 }
 
+function playAgain(e) {
+  document.querySelector(".game-over").classList.remove("indeed");
+  playGame();
+}
+
 // function createCustomCursor() {
 //   const main = document.querySelector("#main");
 //   const cursor = document.createElement("div");
@@ -30,40 +35,40 @@ function loadGame() {
 // }
 
 function playGame(replay) {
-  // createCustomCursor();
-
   document.documentElement.classList.add("playing");
-  var LETTERS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
+  const LETTERS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
   let orderCount = 1;
-  var animations = {};
-  var gameOn = true;
+  const animations = {};
+  let gameOn = true;
   var timeOffset = 500; // 2000 interval between letters starting, will be faster over time
-  var DURATION = 2000; //10000
+  var DURATION = 3000; //10000
   var main = document.querySelector("#main");
   var header = document.querySelector("header");
   var scoreElement = document.getElementById("score");
+  let draggable;
   var score = parseFloat(scoreElement.textContent);
   var rate = 1;
   var RATE_INTERVAL = 0; //playbackRate will increase by .05 for each letter... so after 20 letters, the rate of falling will be 2x what it was at the start
   var misses = 0;
+  const intervalIds = [];
+  const eventListeners = {};
   createBucket(animations);
 
-  LETTERS.forEach(function (l) {
-    // animations[l] = [];
-  });
+  // LETTERS.forEach(function (l) {
+  //   animations[l] = [];
+  // });
 
   var audioCtx;
   var oscillator;
   var gainNode;
 
   function createBucket() {
-    var mousePosition;
-    var offset = [0, 0];
-    var draggable;
-    var isDown = false;
+    let mousePosition;
+    let offset = [0, 0];
+    let isDown = false;
 
-    const main = document.getElementById("main");
     draggable = document.createElement("div");
+    // draggable.classList.add("draggable");
     draggable.style.position = "absolute";
     draggable.style.left = "50%";
     draggable.style.top = "100%";
@@ -77,89 +82,40 @@ function playGame(replay) {
 
     main.appendChild(draggable);
 
-    draggable.addEventListener(
-      "mousedown",
-      function (e) {
-        isDown = true;
-        offset = [
-          draggable.offsetLeft - e.clientX,
-          draggable.offsetTop - e.clientY,
-        ];
-        e.preventDefault();
-      },
-      true
-    );
+    // addEventListenerWithTracking(draggable, "mousedown", function (e) {
+    //   isDown = true;
+    //   offset = [
+    //     draggable.offsetLeft - e.clientX,
+    //     draggable.offsetTop - e.clientY,
+    //   ];
+    //   e.preventDefault();
+    // });
+    draggable.addEventListener("mousedown", function (e) {
+      isDown = true;
+      offset = [
+        draggable.offsetLeft - e.clientX,
+        draggable.offsetTop - e.clientY,
+      ];
+      e.preventDefault();
+    });
 
-    document.addEventListener(
-      "mouseup",
-      function () {
-        isDown = false;
-      },
-      true
-    );
+    document.addEventListener("mouseup", function () {
+      console.log("mouseup");
+      isDown = false;
+    });
 
-    main.addEventListener(
-      "mousemove",
-      function (event) {
-        event.preventDefault();
-        if (isDown) {
-          mousePosition = {
-            x: event.clientX,
-            y: event.clientY,
-          };
-          draggable.style.left = mousePosition.x + offset[0] + "px";
-          draggable.style.top = mousePosition.y + offset[1] + "px";
-        }
-      },
-      true
-    );
-
-    setInterval(function () {
-      Object.keys(animations).forEach(function (key) {
-        const { element: target, animation } = animations[key];
-        if (isOverlapping(draggable, target)) {
-          // execute when the draggable div hovers over a target div
-          const targetText = target.querySelector("b");
-          const num = +targetText.textContent;
-          if (orderCount !== num) {
-            gameOver();
-          }
-          orderCount++;
-          console.log("Draggable div is over a target div");
-          delete animations[key];
-          animation.pause();
-
-          targetText.animate(
-            [
-              {
-                opacity: 1,
-              },
-              {
-                opacity: 0,
-              },
-            ],
-            {
-              easing: "ease-out",
-              fill: "both",
-            }
-          );
-        }
-      });
-    }, 100);
-
-    function isOverlapping(draggable, target) {
-      const rect1 = draggable.getBoundingClientRect();
-      const rect2 = target.getBoundingClientRect();
-
-      const fixedNum = 20;
-      return (
-        rect1.top < rect2.bottom + fixedNum + 50 &&
-        rect1.top > rect2.bottom - fixedNum &&
-        rect1.bottom > rect2.top &&
-        rect1.left < rect2.right &&
-        rect1.right > rect2.left
-      );
-    }
+    main.addEventListener("mousemove", function (event) {
+      event.preventDefault();
+      if (isDown) {
+        console.log(event.clientX, event.clientY);
+        mousePosition = {
+          x: event.clientX,
+          y: event.clientY,
+        };
+        draggable.style.left = mousePosition.x + offset[0] + "px";
+        draggable.style.top = mousePosition.y + offset[1] + "px";
+      }
+    });
   }
 
   //Create a letter element and setup its falling animation, add the animation to the active animation array, and setup an onfinish handler that will represent a miss.
@@ -202,32 +158,34 @@ function playGame(replay) {
 
     //If an animation finishes, we will consider that as a miss, so we will remove it from the active animations array and increment our miss count
     animation.onfinish = function (e) {
-      // var target = container;
+      const target = container;
       // var char = target.textContent;
       delete animations[elementId];
-      console.log("missed");
       // animations[char].pop();
-      // target.classList.add("missed");
+      target.classList.add("missed");
       // handleMisses();
     };
   }
 
   //When a miss is registered, check if we have reached the max number of misses
-  function handleMisses() {
-    misses++;
-    var missedMarker = document.querySelector(".misses:not(.missed)");
-    console.log("miss");
-    if (missedMarker) {
-      missedMarker.classList.add("missed");
-    } else {
-      gameOver();
-    }
-  }
+  // function handleMisses() {
+  //   misses++;
+  //   var missedMarker = document.querySelector(".misses:not(.missed)");
+  //   console.log("miss");
+  //   if (missedMarker) {
+  //     missedMarker.classList.add("missed");
+  //   } else {
+  //     gameOver();
+  //   }
+  // }
 
   //End game and show screen
   function gameOver() {
     gameOn = false;
-    clearInterval(cleanupInterval);
+    for (let i = 0; i < intervalIds.length; i++) {
+      clearInterval(intervalIds[i]);
+    }
+    // clearInterval(cleanupInterval);
     getAllAnimations().forEach(function (anim) {
       anim.pause();
     });
@@ -236,29 +194,83 @@ function playGame(replay) {
     // document.body.removeEventListener('keypress', onPress);
     // oscillator.stop(0);
 
-    document.querySelector(".game-over").classList.add("indeed");
+    const gameOver = document.querySelector(".game-over");
+    gameOver.classList.add("indeed");
     main.textContent = "";
+    const button = document.createElement("button");
+    button.textContent="Start Again"
+    gameOver.appendChild(button)
 
-    const button = document.querySelector(".game-over > button");
-    console.log(button.textContent)
-    button.addEventListener("click", function (e) {
 
-      const main = document.getElementById("main");
-      
+    button.addEventListener("click", function () {
       document.querySelector(".game-over").classList.remove("indeed");
       playGame();
+      gameOver.removeChild(button);
     });
   }
 
   //Periodically remove missed elements, and lower the interval between falling elements
-  var cleanupInterval = setInterval(function () {
-    timeOffset = (timeOffset * 4) / 5;
-    cleanup();
-  }, 20000);
+  intervalIds.push(
+    setInterval(function () {
+      timeOffset = (timeOffset * 4) / 5;
+      cleanup();
+    }, 20000)
+  );
   function cleanup() {
     [].slice.call(main.querySelectorAll(".missed")).forEach(function (missed) {
       main.removeChild(missed);
     });
+  }
+
+  //Periodically do for all dynamic falling numbers, if Draggable(bucket) div is over a target div(number)
+  intervalIds.push(
+    setInterval(function () {
+      Object.keys(animations).forEach(function (key) {
+        const { element: target, animation } = animations[key];
+        if (isOverlapping(draggable, target)) {
+          // execute when the draggable div hovers over a target div
+          const targetText = target.querySelector("b");
+          const num = +targetText.textContent;
+          if (orderCount !== num) {
+            gameOver();
+          }
+          orderCount++;
+          console.log("Draggable div is over a target div");
+          delete animations[key];
+          animation.pause();
+
+          targetText.animate(
+            [
+              {
+                opacity: 1,
+              },
+              {
+                opacity: 0,
+              },
+            ],
+            {
+              easing: "ease-out",
+              fill: "both",
+            }
+          );
+          target.classList.add("missed");
+        }
+      });
+    }, 100)
+  );
+
+  function isOverlapping(draggable, target) {
+    const rect1 = draggable.getBoundingClientRect();
+    const rect2 = target.getBoundingClientRect();
+
+    const fixedNum = 20;
+    return (
+      rect1.top < rect2.bottom + fixedNum + 50 &&
+      rect1.top > rect2.bottom - fixedNum &&
+      rect1.bottom > rect2.top &&
+      rect1.left < rect2.right &&
+      rect1.right > rect2.left
+    );
   }
 
   //Firefox 48 supports document.getAnimations as per latest spec, Chrome 52 and polyfill use older spec
@@ -332,6 +344,22 @@ function playGame(replay) {
     }
   }
   setupNextLetter();
+
+  function addEventListenerWithTracking(element, type, listener) {
+    element.addEventListener(type, listener);
+    if (!eventListeners[type]) {
+      eventListeners[type] = [];
+    }
+    eventListeners[type].push(listener);
+  }
+
+  function removeAllEventListeners(type) {
+    if (eventListeners[type]) {
+      eventListeners[type].forEach((listener) => {
+        element.removeEventListener(type, listener);
+      });
+    }
+  }
 
   // var isPlaying;
   // var maxVol = .025;

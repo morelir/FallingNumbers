@@ -151,6 +151,11 @@ main > div > span b {
   pointer-events: auto;
 }
 
+.game-over p{
+  color:#eee
+}
+
+
 .start-game p {
   font-size: 1rem;
   text-align: center;
