@@ -40,11 +40,11 @@ function playGame(replay) {
     draggable.style.position = "absolute";
     draggable.style.left = "50%";
     draggable.style.top = "100%";
-    draggable.style.width = "100px";
-    draggable.style.height = "100px";
+    draggable.style.width = "10vh";
+    draggable.style.height = "10vh";
     draggable.style.transform = "translate(-50%,-100%)";
     draggable.style.background = "url(./images/bucket.png)";
-    draggable.style.backgroundSize = "100px 100px";
+    draggable.style.backgroundSize = "10vh 10vh";
     draggable.style.zIndex = "1";
     draggable.style.cursor = "grab";
     main.appendChild(draggable);
