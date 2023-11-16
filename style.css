@@ -1,11 +1,10 @@
 body {
   height: 100vh;
-  /* background: #252627; */
   overflow: hidden;
   display: flex;
   align-items: stretch;
   flex-direction: column;
-  /* color: #252627; */
+  color: #252627;
   
   font-family: -apple-system, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
   font-family: monospace;
@@ -27,7 +26,7 @@ main.game-start {
 }
 main p {
   z-index: 1;
-  color: #eee;
+  /* color: #eee; */
   font-size: 1rem;
   text-align: center;
   margin-top: 5vh;
@@ -109,7 +108,7 @@ main > div > span {
 }
 main > div > span b {
   display: block;
-  padding: 2.5vh;
+  /* padding: 2.5vh; */
   transition: opacity 0.25s linear;
 }
 /* @keyframes waver {
@@ -117,11 +116,11 @@ main > div > span b {
     transform: translate3d(6vw, 0, 0);
   }
 } */
-.start-game,.game-over {
+.start-game,.end-game {
   opacity: 0;
-  background: rgba(0, 0, 0, 0.75);
+  /* background: rgba(0, 0, 0, 0.75); */
   pointer-events: none;
-  transition: opacity 0.75s ease-out;
+  /* transition: opacity 0.75s ease-out; */
   position: absolute;
   top: 5vh;
   right: 0;
@@ -143,16 +142,16 @@ main > div > span b {
   pointer-events: auto;
 }
 
-.game-over{
+.end-game{
   opacity: 0;
 }
-.game-over.indeed {
+.end-game.indeed {
   opacity: 1;
   pointer-events: auto;
 }
 
-.game-over p{
-  color:#eee
+.end-game p{
+  /* color:#eee */
 }
 
 
@@ -170,19 +169,19 @@ button {
   border-radius: 0;
   background: transparent;
   border: 0;
-  color: #eee;
+  color: #252627;
   font-size: 3vh;
   font-family: monospace;
   z-index: 999;
 }
 
 main button {
-  border: 0.3rem solid #eee;
+  border: 0.3rem solid #252627;
   padding: 1.5vh 2vh;
   margin-top: 5vh;
 }
-.game-over button {
-  border: 0.3rem solid #eee;
+.end-game button {
+  border: 0.3rem solid #252627;
   padding: 1.5vh 2vh;
   margin-top: 5vh;
 }
