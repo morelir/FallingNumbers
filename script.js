@@ -23,7 +23,7 @@ function playGame(replay) {
   const animations = {};
   let gameOn = true;
   var timeOffset = 3000; // interval between letters starting, will be faster over time
-  var DURATION = 3000; 
+  var DURATION = 3000;
   var main = document.querySelector("#main");
   let draggable;
   var rate = 1;
@@ -32,24 +32,25 @@ function playGame(replay) {
   createBucket();
 
   function createBucket() {
-    let mousePosition;
     let offset = [0, 0];
     let isDown = false;
+    const mainRect = main.getBoundingClientRect();
 
     draggable = document.createElement("div");
     draggable.style.position = "absolute";
     draggable.style.left = "50%";
     draggable.style.top = "100%";
-    draggable.style.width = "10vh";
-    draggable.style.height = "10vh";
+    draggable.style.width = "9vh";
+    draggable.style.height = "9vh";
     draggable.style.transform = "translate(-50%,-100%)";
     draggable.style.background = "url(./images/bucket.png)";
-    draggable.style.backgroundSize = "10vh 10vh";
+    draggable.style.backgroundSize = "9vh 9vh";
     draggable.style.zIndex = "1";
     draggable.style.cursor = "grab";
     main.appendChild(draggable);
 
     draggable.addEventListener("mousedown", function (event) {
+      console.log(draggable.offsetLeft - event.clientX);
       isDown = true;
       offset = [
         draggable.offsetLeft - event.clientX,
@@ -66,15 +67,54 @@ function playGame(replay) {
 
     document.addEventListener("mousemove", function (event) {
       event.preventDefault();
+      const draggableRect = draggable.getBoundingClientRect();
+
       if (isDown) {
-        mousePosition = {
-          x: event.clientX,
-          y: event.clientY,
-        };
-        draggable.style.left = mousePosition.x + offset[0] + "px";
-        draggable.style.top = mousePosition.y + offset[1] + "px";
+        if (
+          // draggable inside horizontal and vertical boundaries of the container
+          draggableInHorizontalBoundaries(event.clientX, draggableRect) &&
+          draggableInVerticalBoundaries(event.clientY, draggableRect)
+        ) {
+          draggable.style.left = event.clientX + offset[0] + "px";
+          draggable.style.top = event.clientY + offset[1] + "px";
+        } else {
+          if (
+            // draggable outside horizontal boundaries, and inside vertical boundaries of the container
+            draggableInVerticalBoundaries(event.clientY, draggableRect) &&
+            !draggableInHorizontalBoundaries(event.clientX, draggableRect)
+          ) {
+            draggable.style.top = event.clientY + offset[1] + "px";
+          } else if (
+            // draggable outside vertical boundaries, and inside horizontal boundaries of the container
+            draggableInHorizontalBoundaries(event.clientX, draggableRect) &&
+            !draggableInVerticalBoundaries(event.clientY, draggableRect)
+          ) {
+            draggable.style.left = event.clientX + offset[0] + "px";
+          }
+        }
       }
     });
+
+    // check if draggable inside horizontal boundaries of the container
+    function draggableInHorizontalBoundaries(mouseX, draggableRect) {
+      console.log(draggable.offsetLeft);
+      return (
+        mouseX - (draggable.offsetLeft - offset[0] - draggableRect.left) >=
+          mainRect.left &&
+        mouseX + (draggableRect.right - draggable.offsetLeft + offset[0]) <=
+          mainRect.right
+      );
+    }
+
+    // check if draggable inside vertical boundaries of the container
+    function draggableInVerticalBoundaries(mouseY, draggableRect) {
+      return (
+        mouseY - (draggable.offsetTop - offset[1] - draggableRect.top) >=
+          mainRect.top &&
+        mouseY + (draggableRect.bottom - draggable.offsetTop + offset[1]) <=
+          mainRect.bottom
+      );
+    }
   }
 
   //Create a letter element and setup its falling animation, add the animation to the active animation array, and setup an onfinish handler that will represent a miss.
@@ -139,7 +179,7 @@ function playGame(replay) {
 
     button.addEventListener("click", function () {
       document.querySelector(".end-game").classList.remove("indeed");
-      endGame.removeChild(button);
+      endGame.textContent = "";
       playGame();
     });
   }
@@ -226,12 +266,12 @@ function playGame(replay) {
   function isOverlapping(draggable, target) {
     const rect1 = draggable.getBoundingClientRect();
     const rect2 = target.getBoundingClientRect();
-    
+
     return (
-      rect1.top < rect2.bottom  &&
+      rect1.top < rect2.bottom &&
       rect1.bottom > rect2.top &&
-      rect1.left < rect2.right  &&
-      rect1.right > rect2.left 
+      rect1.left < rect2.right &&
+      rect1.right > rect2.left
     );
   }
 
