@@ -183,7 +183,7 @@ function playGame(replay) {
     });
   }
 
-  //Periodically do for all dynamic falling numbers, if Draggable(bucket) div is over a target div(number)
+  //Periodically does for all dynamic falling numbers, if Draggable(bucket) div is over on one of them, than does the appropriate action
   intervalIds.push(
     setInterval(function () {
       const keys = Object.keys(animations);
@@ -199,7 +199,6 @@ function playGame(replay) {
             win();
           }
           orderCount++;
-          console.log("Draggable div is over a target div");
           delete animations[key];
           animation.pause();
 
