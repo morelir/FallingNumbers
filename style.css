@@ -36,13 +36,18 @@ main p {
 }
 header,
 footer {
-  height: 5vh;
+  height: 6vh;
   line-height: 5vh;
-  font-size: 3vh;
+  font-size: 4vh;
   background: #aa6657;
-  text-align: right;
+  text-align: left;
   text-transform: uppercase;
   padding: 0 2.5vh;
+}
+header .next-number{
+  margin: 0;
+  margin-left: 1rem;
+  
 }
 footer {
   display: flex;
