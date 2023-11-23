@@ -1,5 +1,9 @@
-import {createBucket} from "./elements.js"
+import {createBucket} from "./bucket.js"
+import { createNumber } from "./fallingNumbers.js";
 
+//game setup
+const LETTERS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+const DURATION = 3000; // letter fall animation duration 
 loadGame();
 
 function loadGame() {
@@ -19,200 +23,25 @@ function loadGame() {
 
 function playGame(replay) {
   document.documentElement.classList.add("playing");
-  const LETTERS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+  // const LETTERS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+  // const DURATION = 3000; // letter fall animation duration 
   let nextNumber = 1;
+  const intervalIds = [];
   const animations = {};
   let gameOn = true;
-  var timeOffset = 3000; // interval between letters starting, will be faster over time
-  var DURATION = 3000;
+  var roundInterval = 3000; // interval between rounds
   var main = document.querySelector("#main");
-  // let draggable;
-  var rate = 1;
-  var RATE_INTERVAL = 0; //playbackRate will increase by .05 for each letter... so after 20 letters, the rate of falling will be 2x what it was at the start
-  const intervalIds = [];
   const roundNumOfLetters = window.innerWidth > 480 ? 16 : 6;
   let draggable = createBucket(main);
   initNext();
 
-  // function createBucket() {
-  //   let offset = [0, 0];
-  //   let isDragging = false;
-  //   const mainRect = main.getBoundingClientRect();
-
-  //   draggable = document.createElement("div");
-  //   draggable.style.position = "absolute";
-  //   draggable.style.left = "50%";
-  //   draggable.style.top = "100%";
-  //   draggable.style.width = "9vh";
-  //   draggable.style.height = "9vh";
-  //   draggable.style.transform = "translate(-50%,-100%)";
-  //   draggable.style.background = "url(./images/bucket.png)";
-  //   draggable.style.backgroundSize = "9vh 9vh";
-  //   draggable.style.zIndex = "1";
-  //   draggable.style.cursor = "grab";
-  //   main.appendChild(draggable);
-
-  //   draggable.addEventListener("mousedown", handleDragStart);
-  //   draggable.addEventListener("touchstart", handleDragStart);
-
-  //   function handleDragStart(e) {
-  //     e.preventDefault(); // Prevent default behavior for both mouse and touch events
-  //     isDragging = true;
-
-  //     if (e.type === "mousedown") {
-  //       offset = [
-  //         draggable.offsetLeft - e.clientX,
-  //         draggable.offsetTop - e.clientY,
-  //       ];
-  //     } else if (e.type === "touchstart" && e.touches.length === 1) {
-  //       offset = [
-  //         draggable.offsetLeft - e.touches[0].clientX,
-  //         draggable.offsetTop - e.touches[0].clientY,
-  //       ];
-  //     }
-
-  //     draggable.style.cursor = "grabbing";
-
-  //     document.addEventListener("mousemove", handleDragMove);
-  //     document.addEventListener("touchmove", handleDragMove, {
-  //       passive: false,
-  //     });
-
-  //     document.addEventListener('mouseup', handleDragEnd);
-  //     document.addEventListener('touchend', handleDragEnd);
-  //   }
-    
-
-  //   function handleDragMove(e) {
-  //     if (!isDragging) return;
-
-  //     e.preventDefault(); // Prevent text selection and other default behaviors
-  //     const draggableRect = draggable.getBoundingClientRect();
-  //     let x, y;
-  //     if (e.type === "mousemove") {
-  //       x = e.clientX;
-  //       y = e.clientY;
-  //     } else if (e.type === "touchmove" && e.touches.length === 1) {
-  //       x = e.touches[0].clientX;
-  //       y = e.touches[0].clientY;
-  //     }
-
-  //     if (
-  //       // draggable inside horizontal and vertical boundaries of the container
-  //       draggableInHorizontalBoundaries(x, draggableRect) &&
-  //       draggableInVerticalBoundaries(y, draggableRect)
-  //     ) {
-  //       draggable.style.left = x + offset[0] + "px";
-  //       draggable.style.top = y + offset[1] + "px";
-  //     } else {
-  //       if (
-  //         // draggable outside horizontal boundaries, and inside vertical boundaries of the container
-  //         draggableInVerticalBoundaries(y, draggableRect) &&
-  //         !draggableInHorizontalBoundaries(x, draggableRect)
-  //       ) {
-  //         draggable.style.top = y + offset[1] + "px";
-  //         console.log(draggableRect.left)
-  //       } else if (
-  //         // draggable outside vertical boundaries, and inside horizontal boundaries of the container
-  //         draggableInHorizontalBoundaries(x, draggableRect) &&
-  //         !draggableInVerticalBoundaries(y, draggableRect)
-  //       ) {
-  //         draggable.style.left = x + offset[0] + "px";
-  //       }
-  //     }
-  //   }
-
-  //   function handleDragEnd(){
-  //     isDragging = false;
-  //     draggable.style.cursor = "grab";
-
-  //     document.removeEventListener('mousemove', handleDragMove);
-  //     document.removeEventListener('touchmove', handleDragMove);
   
-  //     document.removeEventListener('mouseup', handleDragEnd);
-  //     document.removeEventListener('touchend', handleDragEnd);
-  //   }
-    
 
-  //   // check if draggable inside horizontal boundaries of the container
-  //   function draggableInHorizontalBoundaries(mouseX, draggableRect) {
-  //     return (
-  //       mouseX - (draggable.offsetLeft - offset[0] - draggableRect.left) >=
-  //         mainRect.left &&
-  //       mouseX + (draggableRect.right - draggable.offsetLeft + offset[0]) <=
-  //         mainRect.right
-  //     );
-  //   }
-
-  //   // check if draggable inside vertical boundaries of the container
-  //   function draggableInVerticalBoundaries(mouseY, draggableRect) {
-  //     return (
-  //       mouseY - (draggable.offsetTop - offset[1] - draggableRect.top) >=
-  //         mainRect.top &&
-  //       mouseY + (draggableRect.bottom - draggable.offsetTop + offset[1]) <=
-  //         mainRect.bottom
-  //     );
-  //   }
-  // }
-
-  function initNext() {
-    const nextNumber = document.querySelector("header .next-number span");
-    nextNumber.textContent = "1";
-    // const next = document.createElement("p");
-    // const span = document.createElement("span");
-    // next.innerText="Next: ";
-    // next.classList.add("next-number");
-    // span.innerText=nextNumber;
-    // next.appendChild(span)
-    // header.appendChild(next)
-  }
-
-  //Create a letter element and setup its falling animation, add the animation to the active animation array, and setup an onfinish handler that will represent a miss.
-  function createLetter() {
-    var lettersIdx = Math.floor(Math.random() * LETTERS.length);
-    const elementId = Date.now();
-    var x = Math.random() * 100 + "vw";
-    var container = document.createElement("div");
-    container.id = elementId;
-    container.style.zIndex = 1;
-    var letter = document.createElement("span");
-    var letterText = document.createElement("b");
-    letterText.textContent = LETTERS[lettersIdx];
-    letter.appendChild(letterText);
-    container.appendChild(letter);
-    main.appendChild(container);
-    var animation = container.animate(
-      [
-        { transform: "translate3d(" + x + ",-2.5vh,0)" },
-        { transform: "translate3d(" + x + ",82.5vh,0)" },
-      ],
-      {
-        duration: DURATION,
-        easing: "linear",
-        fill: "both",
-      }
-    );
-
-    animations[elementId] = {
-      animation: animation,
-      element: container,
-    };
-
-    rate = rate + RATE_INTERVAL;
-    animation.playbackRate = rate;
-
-    //If an animation finishes, we will consider that as a miss, so we will remove it from the active animations array and increment our miss count
-    animation.onfinish = function (e) {
-      const target = container;
-      delete animations[elementId];
-      target.classList.add("missed");
-    };
-  }
 
   //Periodically remove missed elements, and lower the interval between falling elements
   intervalIds.push(
     setInterval(function () {
-      timeOffset = (timeOffset * 4) / 5;
+      roundInterval = (roundInterval * 4) / 5;
       cleanup();
     }, 20000)
   );
@@ -262,11 +91,6 @@ function playGame(replay) {
     }, 0)
   );
 
-  function stepNextNumber() {
-    const spanNextNumber = document.querySelector("header .next-number span");
-    spanNextNumber.innerText = nextNumber;
-  }
-
   // check if draggable div hovers over a target div
   function isOverlapping(draggable, target) {
     const rect1 = draggable.getBoundingClientRect();
@@ -279,6 +103,26 @@ function playGame(replay) {
       rect1.right > rect2.left
     );
   }
+
+  function initNext() {
+    const nextNumber = document.querySelector("header .next-number span");
+    nextNumber.textContent = "1";
+    // const next = document.createElement("p");
+    // const span = document.createElement("span");
+    // next.innerText="Next: ";
+    // next.classList.add("next-number");
+    // span.innerText=nextNumber;
+    // next.appendChild(span)
+    // header.appendChild(next)
+  }
+  
+
+  function stepNextNumber() {
+    const spanNextNumber = document.querySelector("header .next-number span");
+    spanNextNumber.innerText = nextNumber;
+  }
+
+  
 
   function win() {
     gameOn = false;
@@ -347,14 +191,14 @@ function playGame(replay) {
       for (let i = 0; i < roundNumOfLetters; i++) {
         setTimeout(() => {
           if (gameOn) {
-            createLetter();
+            createNumber(main,animations);
           }
         }, 100 * i);
       }
       setTimeout(function () {
         setupNextLetter();
-      }, timeOffset);
+      }, roundInterval);
     }
   }
-  // setupNextLetter();
+  setupNextLetter();
 }

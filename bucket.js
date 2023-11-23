@@ -118,14 +118,7 @@ export function createBucket(container) {
   return draggable;
 }
 
-export function initNext() {
-  const nextNumber = document.querySelector("header .next-number span");
-  nextNumber.textContent = "1";
-  // const next = document.createElement("p");
-  // const span = document.createElement("span");
-  // next.innerText="Next: ";
-  // next.classList.add("next-number");
-  // span.innerText=nextNumber;
-  // next.appendChild(span)
-  // header.appendChild(next)
-}
+ 
+
+
+
