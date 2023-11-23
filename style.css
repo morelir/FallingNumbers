@@ -12,7 +12,7 @@ body {
   position: relative;
 }
 main {
-
+  opacity: 1;
   overflow: hidden;
   position: relative;
   flex: 1;
@@ -21,9 +21,7 @@ main {
   align-items: center;
   justify-content: center;
 }
-main.game-start {
 
-}
 main p {
   z-index: 1;
   /* color: #eee; */
@@ -43,12 +41,17 @@ footer {
   text-align: left;
   text-transform: uppercase;
   padding: 0 2.5vh;
+  display: flex;
+  align-items: center;
 }
+
 header .next-number{
   margin: 0;
-  margin-left: 1rem;
+  margin-left: 1vh;
   
+ 
 }
+
 footer {
   display: flex;
   justify-content: space-between;
@@ -88,7 +91,7 @@ main > div {
   text-transform: uppercase;
   perspective: 300px;
   transition: opacity 0.7s ease-in;
-  font-size: 5vh;
+  font-size: 4vh;
 }
 main > div.popped {
   opacity: 0;
@@ -121,7 +124,7 @@ main > div > span b {
     transform: translate3d(6vw, 0, 0);
   }
 } */
-.start-game,.end-game {
+.end-game {
   opacity: 0;
   /* background: rgba(0, 0, 0, 0.75); */
   pointer-events: none;
@@ -139,34 +142,12 @@ main > div > span b {
   text-transform: uppercase;
 }
 
-.start-game{
-  opacity: 1;
-}
-.start-game.indeed{
-  opacity: 0;
-  pointer-events: auto;
-}
-
 .end-game{
   opacity: 0;
 }
 .end-game.indeed {
   opacity: 1;
   pointer-events: auto;
-}
-
-.end-game p{
-  /* color:#eee */
-}
-
-
-.start-game p {
-  font-size: 1rem;
-  text-align: center;
-  margin-top: 5vh;
-  padding: 0 2rem;
-  max-width: 30rem;
-  line-height: 1.4;
 }
 
 button {
