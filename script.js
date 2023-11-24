@@ -23,8 +23,6 @@ function loadGame() {
 
 function playGame(replay) {
   document.documentElement.classList.add("playing");
-  // const LETTERS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-  // const DURATION = 3000; // letter fall animation duration 
   let nextNumber = 1;
   const intervalIds = [];
   const animations = {};
