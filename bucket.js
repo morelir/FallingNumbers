@@ -74,7 +74,6 @@ export function createBucket(container) {
         !draggableInHorizontalBoundaries(x, draggableRect)
       ) {
         draggable.style.top = y + offset[1] + "px";
-        console.log(draggableRect.left);
       } else if (
         // draggable outside vertical boundaries, and inside horizontal boundaries of the container
         draggableInHorizontalBoundaries(x, draggableRect) &&

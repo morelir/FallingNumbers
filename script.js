@@ -1,9 +1,9 @@
-import {createBucket} from "./bucket.js"
-import { createNumber } from "./fallingNumbers.js";
+import { createBucket } from "./bucket.js";
+import { fallingNumbers } from "./fallingNumbers.js";
 
 //game setup
 const LETTERS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-const DURATION = 3000; // letter fall animation duration 
+const DURATION = 3000; // letter fall animation duration
 loadGame();
 
 function loadGame() {
@@ -21,25 +21,21 @@ function loadGame() {
   });
 }
 
-function playGame(replay) {
+function playGame() {
   document.documentElement.classList.add("playing");
   let nextNumber = 1;
   const intervalIds = [];
   const animations = {};
-  let gameOn = true;
-  var roundInterval = 3000; // interval between rounds
-  var main = document.querySelector("#main");
-  const roundNumOfLetters = window.innerWidth > 480 ? 16 : 6;
+  let game = { isOn: true };
+  const main = document.querySelector("#main");
+  const header = document.querySelector("header");
   let draggable = createBucket(main);
   initNext();
-
-  
-
+  fallingNumbers(main, game, animations);
 
   //Periodically remove missed elements, and lower the interval between falling elements
   intervalIds.push(
     setInterval(function () {
-      roundInterval = (roundInterval * 4) / 5;
       cleanup();
     }, 20000)
   );
@@ -49,14 +45,13 @@ function playGame(replay) {
     });
   }
 
-  //Periodically does for all dynamic falling numbers, if Draggable(bucket) div is over on one of them, than does the appropriate action
+  //Periodically does for all dynamic falling numbers, if Draggable(bucket) div is collision with one of them, than does the appropriate action
   intervalIds.push(
     setInterval(function () {
       const keys = Object.keys(animations);
       for (const key of keys) {
         const { element: target, animation } = animations[key];
-        if (isOverlapping(draggable, target)) {
-          // execute when the draggable div hovers over a target div
+        if (detectCollision(draggable, target)) {
           const targetText = target.querySelector("b");
           const num = +targetText.textContent;
           if (nextNumber !== num) {
@@ -90,50 +85,49 @@ function playGame(replay) {
   );
 
   // check if draggable div hovers over a target div
-  function isOverlapping(draggable, target) {
-    const rect1 = draggable.getBoundingClientRect();
-    const rect2 = target.getBoundingClientRect();
+  // Detects collision between draggable(bucket) element and fallingNumber element
+  function detectCollision(draggable, fallingNumber) {
+    const draggableRect = draggable.getBoundingClientRect();
+    const fallingNumberRect = fallingNumber.getBoundingClientRect();
 
     return (
-      rect1.top < rect2.bottom &&
-      rect1.bottom > rect2.top &&
-      rect1.left < rect2.right &&
-      rect1.right > rect2.left
+      draggableRect.top < fallingNumberRect.bottom &&
+      draggableRect.bottom > fallingNumberRect.top &&
+      draggableRect.left < fallingNumberRect.right &&
+      draggableRect.right > fallingNumberRect.left
     );
   }
 
   function initNext() {
-    const nextNumber = document.querySelector("header .next-number span");
-    nextNumber.textContent = "1";
-    // const next = document.createElement("p");
-    // const span = document.createElement("span");
-    // next.innerText="Next: ";
-    // next.classList.add("next-number");
-    // span.innerText=nextNumber;
-    // next.appendChild(span)
-    // header.appendChild(next)
+    // const nextNumber = document.querySelector("header .next-number span");
+    // nextNumber.textContent = "1";
+    const next = document.createElement("p");
+    const span = document.createElement("span");
+    next.innerText = "Next: ";
+    next.classList.add("next-number");
+    span.innerText = nextNumber;
+    next.appendChild(span);
+    header.appendChild(next);
   }
-  
 
   function stepNextNumber() {
     const spanNextNumber = document.querySelector("header .next-number span");
     spanNextNumber.innerText = nextNumber;
   }
 
-  
-
   function win() {
-    gameOn = false;
+    game.isOn = false;
     for (let i = 0; i < intervalIds.length; i++) {
       clearInterval(intervalIds[i]);
     }
-    getAllAnimations().forEach(function (anim) {
+    document.getAnimations().forEach(function (anim) {
       anim.pause();
     });
 
     const endGame = document.querySelector(".end-game");
     endGame.classList.add("indeed");
     main.textContent = "";
+    header.textContent = "";
     const p = document.createElement("p");
     p.textContent = "You Win!";
     const button = document.createElement("button");
@@ -149,17 +143,18 @@ function playGame(replay) {
 
   //End game and show screen
   function gameOver() {
-    gameOn = false;
+    game.isOn = false;
     for (let i = 0; i < intervalIds.length; i++) {
       clearInterval(intervalIds[i]);
     }
-    getAllAnimations().forEach(function (anim) {
+    document.getAnimations().forEach(function (anim) {
       anim.pause();
     });
 
     const endGame = document.querySelector(".end-game");
     endGame.classList.add("indeed");
     main.textContent = "";
+    header.textContent = "";
     const p = document.createElement("p");
     p.textContent = "Game Over";
     const button = document.createElement("button");
@@ -172,31 +167,4 @@ function playGame(replay) {
       playGame();
     });
   }
-
-  //Firefox 48 supports document.getAnimations as per latest spec, Chrome 52 and polyfill use older spec
-  function getAllAnimations() {
-    if (document.getAnimations) {
-      return document.getAnimations();
-    } else if (document.timeline && document.timeline.getAnimations) {
-      return document.timeline.getAnimations();
-    }
-    return [];
-  }
-
-  //start the letters falling... create the element+animation, and setup timeout for next letter to start
-  function setupNextLetter() {
-    if (gameOn) {
-      for (let i = 0; i < roundNumOfLetters; i++) {
-        setTimeout(() => {
-          if (gameOn) {
-            createNumber(main,animations);
-          }
-        }, 100 * i);
-      }
-      setTimeout(function () {
-        setupNextLetter();
-      }, roundInterval);
-    }
-  }
-  setupNextLetter();
 }
