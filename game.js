@@ -49,7 +49,7 @@ function playGame() {
       for (const key of keys) {
         const { element: target, animation } = animations[key];
         if (detectCollision(draggable, target)) {
-          const targetText = target.querySelector("b");
+          const targetText = target.querySelector("span");
           const num = +targetText.textContent;
           if (nextNumber !== num) {
             return gameOver();

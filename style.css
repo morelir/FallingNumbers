@@ -119,6 +119,7 @@ main > div > span b {
   /* padding: 2.5vh; */
   transition: opacity 0.25s linear;
 }
+
 /* @keyframes waver {
   100% {
     transform: translate3d(6vw, 0, 0);

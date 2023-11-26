@@ -2,7 +2,7 @@ const DURATION = 3000; // Fall animation duration
 const ROUND_INTERVAL = 4000; // Interval between rounds
 const NUMBER_OF_FALLING_NUMBERS = window.innerWidth > 480 ? 16 : 6; // Number of falling numbers each round
 
-//start the letters falling... create the element+animation, and setup timeout for next letter to start
+//start the numbers falling
 export function fallingNumbers(container, game, animations) {
   if (game.isOn) {
     for (let i = 0; i < NUMBER_OF_FALLING_NUMBERS; i++) {
@@ -18,7 +18,7 @@ export function fallingNumbers(container, game, animations) {
   }
 }
 
-//Create a letter element and setup its falling animation, add the animation to the active animation array, and setup an onfinish handler that will represent a miss.
+//Create a number element and setup its falling animation, add the animation to the active animation array
 export function createNumber(container, animations) {
   const elementId = Date.now();
   const x = Math.random() * (window.innerWidth > 480 ? 95 : 90) + "vw";
@@ -26,9 +26,7 @@ export function createNumber(container, animations) {
   numContainer.id = elementId;
   numContainer.style.zIndex = 1;
   const num = document.createElement("span");
-  const numText = document.createElement("b");
-  numText.textContent = Math.floor(Math.random() * 10) + 1;
-  num.appendChild(numText);
+  num.textContent = Math.floor(Math.random() * 10) + 1;
   numContainer.appendChild(num);
   container.appendChild(numContainer);
   const animation = numContainer.animate(
@@ -50,10 +48,10 @@ export function createNumber(container, animations) {
 
   animation.playbackRate = 1;
 
-  //If an animation finishes, we will consider that as a miss, so we will remove it from the active animations array and increment our miss count
+  //If an animation finishes, we will remove it from the active animations array
   animation.onfinish = function (e) {
     const target = numContainer;
-    delete animations[elementId];
     target.classList.add("missed");
+    delete animations[elementId];
   };
 }
