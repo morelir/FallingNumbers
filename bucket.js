@@ -4,16 +4,7 @@ export function createBucket(container) {
   const containerRect = container.getBoundingClientRect();
 
   let draggable = document.createElement("div");
-  draggable.style.position = "absolute";
-  draggable.style.left = "50%";
-  draggable.style.top = "100%";
-  draggable.style.width = "9vh";
-  draggable.style.height = "9vh";
-  draggable.style.transform = "translate(-50%,-100%)";
-  draggable.style.background = "url(./images/bucket.png)";
-  draggable.style.backgroundSize = "9vh 9vh";
-  draggable.style.zIndex = "1";
-  draggable.style.cursor = "grab";
+  draggable.classList.add("bucket");
   container.appendChild(draggable);
 
   draggable.addEventListener("mousedown", handleDragStart);
@@ -61,23 +52,23 @@ export function createBucket(container) {
     }
 
     if (
-      // draggable inside horizontal and vertical boundaries of the container
-      draggableInHorizontalBoundaries(x, draggableRect) &&
-      draggableInVerticalBoundaries(y, draggableRect)
+      // cursor inside horizontal and vertical boundaries of the container
+      cursorInVerticalBoundaries(x, draggableRect) &&
+      cursorInHorizontalBoundaries(y, draggableRect)
     ) {
       draggable.style.left = x + offset[0] + "px";
       draggable.style.top = y + offset[1] + "px";
     } else {
       if (
-        // draggable outside horizontal boundaries, and inside vertical boundaries of the container
-        draggableInVerticalBoundaries(y, draggableRect) &&
-        !draggableInHorizontalBoundaries(x, draggableRect)
+        // cursor outside vertical boundaries, and inside horizontal boundaries of the container
+        cursorInHorizontalBoundaries(y, draggableRect) &&
+        !cursorInVerticalBoundaries(x, draggableRect)
       ) {
         draggable.style.top = y + offset[1] + "px";
       } else if (
-        // draggable outside vertical boundaries, and inside horizontal boundaries of the container
-        draggableInHorizontalBoundaries(x, draggableRect) &&
-        !draggableInVerticalBoundaries(y, draggableRect)
+        // cursor outside horizontal boundaries, and inside vertical boundaries of the container
+        cursorInVerticalBoundaries(x, draggableRect) &&
+        !cursorInHorizontalBoundaries(y, draggableRect)
       ) {
         draggable.style.left = x + offset[0] + "px";
       }
@@ -95,8 +86,8 @@ export function createBucket(container) {
     document.removeEventListener("touchend", handleDragEnd);
   }
 
-  // check if draggable inside horizontal boundaries of the container
-  function draggableInHorizontalBoundaries(mouseX, draggableRect) {
+  // check if cursor inside vertical boundaries of the container
+  function cursorInVerticalBoundaries(mouseX, draggableRect) {
     return (
       mouseX - (draggable.offsetLeft - offset[0] - draggableRect.left) >=
         containerRect.left &&
@@ -105,8 +96,8 @@ export function createBucket(container) {
     );
   }
 
-  // check if draggable inside vertical boundaries of the container
-  function draggableInVerticalBoundaries(mouseY, draggableRect) {
+  // check if cursor inside horizontal boundaries of the container
+  function cursorInHorizontalBoundaries(mouseY, draggableRect) {
     return (
       mouseY - (draggable.offsetTop - offset[1] - draggableRect.top) >=
         containerRect.top &&
@@ -114,10 +105,6 @@ export function createBucket(container) {
         containerRect.bottom
     );
   }
+  
   return draggable;
 }
-
- 
-
-
-

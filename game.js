@@ -1,9 +1,7 @@
 import { createBucket } from "./bucket.js";
 import { fallingNumbers } from "./fallingNumbers.js";
+import { createNext, nextNumber, stepNextNumber } from "./nextNumber.js";
 
-//game setup
-const LETTERS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-const DURATION = 3000; // letter fall animation duration
 loadGame();
 
 function loadGame() {
@@ -23,14 +21,13 @@ function loadGame() {
 
 function playGame() {
   document.documentElement.classList.add("playing");
-  let nextNumber = 1;
   const intervalIds = [];
   const animations = {};
   let game = { isOn: true };
   const main = document.querySelector("#main");
   const header = document.querySelector("header");
   let draggable = createBucket(main);
-  initNext();
+  createNext();
   fallingNumbers(main, game, animations);
 
   //Periodically remove missed elements, and lower the interval between falling elements
@@ -59,10 +56,8 @@ function playGame() {
           } else if (num === 10) {
             return win();
           }
-          nextNumber++;
           delete animations[key];
           animation.pause();
-
           targetText.animate(
             [
               {
@@ -84,7 +79,6 @@ function playGame() {
     }, 0)
   );
 
-  // check if draggable div hovers over a target div
   // Detects collision between draggable(bucket) element and fallingNumber element
   function detectCollision(draggable, fallingNumber) {
     const draggableRect = draggable.getBoundingClientRect();
@@ -98,24 +92,16 @@ function playGame() {
     );
   }
 
-  function initNext() {
-    // const nextNumber = document.querySelector("header .next-number span");
-    // nextNumber.textContent = "1";
-    const next = document.createElement("p");
-    const span = document.createElement("span");
-    next.innerText = "Next: ";
-    next.classList.add("next-number");
-    span.innerText = nextNumber;
-    next.appendChild(span);
-    header.appendChild(next);
-  }
-
-  function stepNextNumber() {
-    const spanNextNumber = document.querySelector("header .next-number span");
-    spanNextNumber.innerText = nextNumber;
-  }
-
   function win() {
+    gameIsEnded("You Win!");
+  }
+
+  function gameOver() {
+    gameIsEnded("Game Over");
+  }
+
+  //Clear resources and show end game screen
+  function gameIsEnded(text) {
     game.isOn = false;
     for (let i = 0; i < intervalIds.length; i++) {
       clearInterval(intervalIds[i]);
@@ -129,36 +115,9 @@ function playGame() {
     main.textContent = "";
     header.textContent = "";
     const p = document.createElement("p");
-    p.textContent = "You Win!";
+    p.textContent = text;
     const button = document.createElement("button");
     button.textContent = "Start Again";
-    endGame.append(p, button);
-
-    button.addEventListener("click", function () {
-      document.querySelector(".end-game").classList.remove("indeed");
-      endGame.textContent = "";
-      playGame();
-    });
-  }
-
-  //End game and show screen
-  function gameOver() {
-    game.isOn = false;
-    for (let i = 0; i < intervalIds.length; i++) {
-      clearInterval(intervalIds[i]);
-    }
-    document.getAnimations().forEach(function (anim) {
-      anim.pause();
-    });
-
-    const endGame = document.querySelector(".end-game");
-    endGame.classList.add("indeed");
-    main.textContent = "";
-    header.textContent = "";
-    const p = document.createElement("p");
-    p.textContent = "Game Over";
-    const button = document.createElement("button");
-    button.textContent = "Start Again ";
     endGame.append(p, button);
 
     button.addEventListener("click", function () {

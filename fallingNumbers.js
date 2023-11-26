@@ -1,36 +1,33 @@
-const NUMBERS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-const DURATION = 3000; // Fall animation duration 
+const DURATION = 3000; // Fall animation duration
 const ROUND_INTERVAL = 4000; // Interval between rounds
 const NUMBER_OF_FALLING_NUMBERS = window.innerWidth > 480 ? 16 : 6; // Number of falling numbers each round
 
-
 //start the letters falling... create the element+animation, and setup timeout for next letter to start
-export function fallingNumbers(container,game,animations) {
+export function fallingNumbers(container, game, animations) {
   if (game.isOn) {
     for (let i = 0; i < NUMBER_OF_FALLING_NUMBERS; i++) {
       setTimeout(() => {
         if (game.isOn) {
-          createNumber(container,animations);
+          createNumber(container, animations);
         }
       }, 100 * i);
     }
     setTimeout(function () {
-      fallingNumbers(container,game,animations);
+      fallingNumbers(container, game, animations);
     }, ROUND_INTERVAL);
   }
 }
 
 //Create a letter element and setup its falling animation, add the animation to the active animation array, and setup an onfinish handler that will represent a miss.
 export function createNumber(container, animations) {
-  const numbersIdx = Math.floor(Math.random() * NUMBERS.length);
   const elementId = Date.now();
-  const x = Math.random() * 100 + "vw";
+  const x = Math.random() * (window.innerWidth > 480 ? 95 : 90) + "vw";
   const numContainer = document.createElement("div");
   numContainer.id = elementId;
   numContainer.style.zIndex = 1;
   const num = document.createElement("span");
   const numText = document.createElement("b");
-  numText.textContent = NUMBERS[numbersIdx];
+  numText.textContent = Math.floor(Math.random() * 10) + 1;
   num.appendChild(numText);
   numContainer.appendChild(num);
   container.appendChild(numContainer);
@@ -60,5 +57,3 @@ export function createNumber(container, animations) {
     target.classList.add("missed");
   };
 }
-
-

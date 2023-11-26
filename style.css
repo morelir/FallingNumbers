@@ -176,18 +176,16 @@ button:hover {
   border-color: #aa6657;
 }
 
-main {
-  /* cursor: none;  */
+.bucket{
+  position : absolute;
+  left : 50%;
+  top : 100%;
+  width : 9vh;
+  height : 9vh;
+  transform : translate(-50%,-100%);
+  background : url(./images/bucket.png);
+  background-size : 9vh 9vh;
+  z-index:   1;
+  cursor : grab;
 }
 
-.custom-cursor {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background-color: #ff0000; /* Customize the cursor color */
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 1;
-  transform: translate(-50%, -50%);
-  /* transition: transform 0.1s ease; */
-}
