@@ -1,6 +1,6 @@
 const DURATION = 3000; // Fall animation duration
 const ROUND_INTERVAL = 4000; // Interval between rounds
-const NUMBER_OF_FALLING_NUMBERS = window.innerWidth > 480 ? 16 : 6; // Number of falling numbers each round
+const NUMBER_OF_FALLING_NUMBERS = window.innerWidth > 480 ? 16 : 8; // Number of falling numbers each round
 
 //start the numbers falling
 export function fallingNumbers(container, game, animations) {
@@ -51,7 +51,7 @@ export function createNumber(container, animations) {
   //If an animation finishes, we will remove it from the active animations array
   animation.onfinish = function (e) {
     const target = numContainer;
-    target.classList.add("missed");
+    target.classList.add("hidden");
     delete animations[elementId];
   };
 }

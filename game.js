@@ -11,7 +11,7 @@ function loadGame() {
   main.appendChild(button);
   var rules = document.createElement("p");
   rules.textContent =
-    "Numbers will fall... drag the bucket and catch numbers from 1 to 10 before they hit the ground";
+    "Numbers will fall... drag the bucket and catch numbers from 1 to 10 in sequential order";
   main.appendChild(rules);
   button.addEventListener("click", function startIt(e) {
     main.textContent = "";
@@ -30,15 +30,15 @@ function playGame() {
   createNext();
   fallingNumbers(main, game, animations);
 
-  //Periodically remove missed elements, and lower the interval between falling elements
+  //Periodically remove hidden elements, and lower the interval between falling elements
   intervalIds.push(
     setInterval(function () {
       cleanup();
     }, 20000)
   );
   function cleanup() {
-    [].slice.call(main.querySelectorAll(".missed")).forEach(function (missed) {
-      main.removeChild(missed);
+    [].slice.call(main.querySelectorAll(".hidden")).forEach(function (hidden) {
+      main.removeChild(hidden);
     });
   }
 
@@ -58,21 +58,7 @@ function playGame() {
           }
           delete animations[key];
           animation.pause();
-          targetText.animate(
-            [
-              {
-                opacity: 1,
-              },
-              {
-                opacity: 0,
-              },
-            ],
-            {
-              easing: "ease-out",
-              fill: "both",
-            }
-          );
-          target.classList.add("missed");
+          target.classList.add("hidden");
           stepNextNumber();
         }
       }
