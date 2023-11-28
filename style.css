@@ -5,7 +5,6 @@ body {
   align-items: stretch;
   flex-direction: column;
   color: #252627;
-
   font-family: -apple-system, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
   font-family: monospace;
   font-size: 5vh;
@@ -35,7 +34,6 @@ main {
 
 main p {
   z-index: 1;
-  /* color: #eee; */
   font-size: 1rem;
   text-align: center;
   margin-top: 5vh;
@@ -116,18 +114,11 @@ main > div > span {
 }
 main > div > span b {
   display: block;
-  /* padding: 2.5vh; */
   transition: opacity 0s linear;
 }
 
-/* @keyframes waver {
-  100% {
-    transform: translate3d(6vw, 0, 0);
-  }
-} */
 .end-game {
   opacity: 0;
-  /* background: rgba(0, 0, 0, 0.75); */
   pointer-events: none;
   transition: opacity 0.75s ease-out;
   position: absolute;
