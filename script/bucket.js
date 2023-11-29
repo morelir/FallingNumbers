@@ -1,19 +1,17 @@
 export function createBucket(container) {
+  const containerRect = container.getBoundingClientRect();
   let offset = [0, 0];
   let isDragging = false;
-  const containerRect = container.getBoundingClientRect();
-
   let draggable = document.createElement("div");
   draggable.classList.add("bucket");
   container.appendChild(draggable);
-
+  
   draggable.addEventListener("mousedown", handleDragStart);
   draggable.addEventListener("touchstart", handleDragStart);
 
   function handleDragStart(e) {
     e.preventDefault(); // Prevent default behavior for both mouse and touch events
     isDragging = true;
-
     if (e.type === "mousedown") {
       offset = [
         draggable.offsetLeft - e.clientX,
