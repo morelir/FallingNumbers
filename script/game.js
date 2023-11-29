@@ -5,11 +5,11 @@ import { createNext, nextNumber, stepNextNumber } from "./nextNumber.js";
 loadGame();
 
 function loadGame() {
-  var button = document.createElement("button");
+  const button = document.createElement("button");
   button.textContent = "Start Game";
-  var main = document.querySelector("main");
+  const main = document.querySelector("main");
   main.appendChild(button);
-  var rules = document.createElement("p");
+  const rules = document.createElement("p");
   rules.textContent =
     "Numbers will fall... drag the bucket and catch numbers from 1 to 10 in sequential order";
   main.appendChild(rules);
@@ -20,7 +20,6 @@ function loadGame() {
 }
 
 function playGame() {
-  document.documentElement.classList.add("playing");
   const intervalIds = [];
   const animations = {};
   let game = { isOn: true };
