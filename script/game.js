@@ -23,7 +23,7 @@ function playGame() {
   const intervalIds = [];
   const animations = {};
   const game = { isOn: true };
-  const main = document.querySelector("#main");
+  const main = document.querySelector("main");
   const header = document.querySelector("header");
   const bucket = createBucket(main);
   createNext();

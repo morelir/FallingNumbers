@@ -100,12 +100,7 @@ main > div {
   transition: opacity 0.7s ease-out;
   font-size: 4vh;
 }
-main > div.hidden {
-  opacity: 0;
-}
-main > div.hidden > span {
-  animation-play-state: paused;
-}
+
 main > div > span {
   position: absolute;
   display: block;
@@ -179,6 +174,10 @@ button:hover {
   background-size: 8vh 8vh;
   z-index: 1;
   cursor: grab;
+}
+
+.hidden{
+  opacity: 0;
 }
 
 
