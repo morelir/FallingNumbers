@@ -29,42 +29,47 @@ function playGame() {
   createNext();
   fallingNumbers(main, game, animations);
 
-  //Periodically remove hidden elements, and lower the interval between falling elements
+  //Periodically remove hidden elements
   intervalIds.push(
     setInterval(function () {
-      cleanup();
+      cleanupHiddens();
     }, 20000)
   );
-  function cleanup() {
+
+  function cleanupHiddens() {
     [...main.querySelectorAll(".hidden")].forEach(function (hidden) {
       main.removeChild(hidden);
     });
   }
 
-  //Periodically does for all dynamic falling numbers, if Draggable(bucket) div is collision with one of them, than does the appropriate action
+  //Periodically checking collision between dynamic falling numbers elements and dragabble(bucket) element
   intervalIds.push(
     setInterval(function () {
-      const keys = Object.keys(animations);
-      for (const key of keys) {
-        const { element: target, animation } = animations[key];
-        if (detectCollision(draggable, target)) {
-          const targetText = target.querySelector("span");
-          const num = +targetText.textContent;
-          if (nextNumber !== num) {
-            return gameOver();
-          } else if (num === 10) {
-            return win();
-          }
-          delete animations[key];
-          animation.pause();
-          target.classList.add("hidden");
-          stepNextNumber();
-        }
-      }
+      checkingCollision();
     }, 0)
   );
 
-  // Detects collision between draggable(bucket) element and fallingNumber element
+  function checkingCollision() {
+    const keys = Object.keys(animations);
+    for (const key of keys) {
+      const { element: target, animation } = animations[key];
+      if (detectCollision(draggable, target)) {
+        const targetText = target.querySelector("span");
+        const num = +targetText.textContent;
+        if (nextNumber !== num) {
+          return gameOver();
+        } else if (num === 10) {
+          return win();
+        }
+        delete animations[key];
+        animation.pause();
+        target.classList.add("hidden");
+        stepNextNumber();
+      }
+    }
+  }
+
+  // Detects collision between draggable(bucket) element and falling number element
   function detectCollision(draggable, fallingNumber) {
     const draggableRect = draggable.getBoundingClientRect();
     const fallingNumberRect = fallingNumber.getBoundingClientRect();
