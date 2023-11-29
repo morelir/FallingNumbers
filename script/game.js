@@ -106,7 +106,7 @@ function playGame() {
     endGame.append(p, button);
 
     button.addEventListener("click", function () {
-      document.querySelector(".end-game").classList.remove("indeed");
+      endGame.classList.remove("indeed");
       endGame.textContent = "";
       playGame();
     });
