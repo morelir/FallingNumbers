@@ -22,10 +22,10 @@ function loadGame() {
 function playGame() {
   const intervalIds = [];
   const animations = {};
-  let game = { isOn: true };
+  const game = { isOn: true };
   const main = document.querySelector("#main");
   const header = document.querySelector("header");
-  let draggable = createBucket(main);
+  const draggable = createBucket(main);
   createNext();
   fallingNumbers(main, game, animations);
 
