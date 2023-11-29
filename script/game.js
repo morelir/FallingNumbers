@@ -36,7 +36,7 @@ function playGame() {
     }, 20000)
   );
   function cleanup() {
-    [].slice.call(main.querySelectorAll(".hidden")).forEach(function (hidden) {
+    [...main.querySelectorAll(".hidden")].forEach(function (hidden) {
       main.removeChild(hidden);
     });
   }
