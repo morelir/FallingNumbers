@@ -25,24 +25,11 @@ function playGame() {
   const game = { isOn: true };
   const main = document.querySelector("#main");
   const header = document.querySelector("header");
-  const draggable = createBucket(main);
+  const bucket = createBucket(main);
   createNext();
   fallingNumbers(main, game, animations);
 
-  //Periodically remove hidden elements
-  intervalIds.push(
-    setInterval(function () {
-      cleanupHiddens();
-    }, 20000)
-  );
-
-  function cleanupHiddens() {
-    [...main.querySelectorAll(".hidden")].forEach(function (hidden) {
-      main.removeChild(hidden);
-    });
-  }
-
-  //Periodically checking collision between dynamic falling numbers elements and dragabble(bucket) element
+  //Periodically checking collision between dynamic falling numbers elements and bucket element
   intervalIds.push(
     setInterval(function () {
       checkingCollision();
@@ -53,7 +40,7 @@ function playGame() {
     const keys = Object.keys(animations);
     for (const key of keys) {
       const { element: target, animation } = animations[key];
-      if (detectCollision(draggable, target)) {
+      if (detectCollision(bucket, target)) {
         const targetText = target.querySelector("span");
         const num = +targetText.textContent;
         if (nextNumber !== num) {
@@ -69,17 +56,30 @@ function playGame() {
     }
   }
 
-  // Detects collision between draggable(bucket) element and falling number element
-  function detectCollision(draggable, fallingNumber) {
-    const draggableRect = draggable.getBoundingClientRect();
+  // Detects collision between bucket element and falling number element
+  function detectCollision(bucket, fallingNumber) {
+    const bucketRect = bucket.getBoundingClientRect();
     const fallingNumberRect = fallingNumber.getBoundingClientRect();
 
     return (
-      draggableRect.top < fallingNumberRect.bottom &&
-      draggableRect.bottom > fallingNumberRect.top &&
-      draggableRect.left < fallingNumberRect.right &&
-      draggableRect.right > fallingNumberRect.left
+      bucketRect.top < fallingNumberRect.bottom &&
+      bucketRect.bottom > fallingNumberRect.top &&
+      bucketRect.left < fallingNumberRect.right &&
+      bucketRect.right > fallingNumberRect.left
     );
+  }
+
+  //Periodically remove hidden elements
+  intervalIds.push(
+    setInterval(function () {
+      cleanupHiddens();
+    }, 20000)
+  );
+
+  function cleanupHiddens() {
+    [...main.querySelectorAll(".hidden")].forEach(function (hidden) {
+      main.removeChild(hidden);
+    });
   }
 
   function win() {
