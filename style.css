@@ -10,8 +10,8 @@ body {
   font-size: 5vh;
   position: relative;
 }
+
 main {
-  opacity: 1;
   overflow: hidden;
   position: relative;
   flex: 1;
@@ -20,19 +20,20 @@ main {
   align-items: center;
   justify-content: center;
   user-select: none;
+  animation: fadeIn 500ms ease-in-out;
+}
+
+.start-screen,.win-screen,.end-screen{
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   animation: fadeIn 1s ease-in-out;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-main p {
+.start-screen p{
   z-index: 1;
   font-size: 1rem;
   text-align: center;
@@ -41,6 +42,7 @@ main p {
   max-width: 30rem;
   line-height: 1.4;
 }
+
 header,
 footer {
   height: 6vh;
@@ -112,30 +114,6 @@ main > div > span b {
   transition: opacity 0s linear;
 }
 
-.end-game {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.75s ease-out;
-  position: absolute;
-  top: 5vh;
-  right: 0;
-  bottom: 5vh;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  text-transform: uppercase;
-}
-
-.end-game {
-  opacity: 0;
-}
-.end-game.indeed {
-  opacity: 1;
-  pointer-events: auto;
-}
 
 button {
   appearance: none;
@@ -148,16 +126,13 @@ button {
   z-index: 999;
 }
 
-main button {
+
+.start-screen button,.win-screen button,.end-screen button{
   border: 0.3rem solid #252627;
   padding: 1.5vh 2vh;
   margin-top: 5vh;
 }
-.end-game button {
-  border: 0.3rem solid #252627;
-  padding: 1.5vh 2vh;
-  margin-top: 5vh;
-}
+
 
 button:hover {
   border-color: #aa6657;
@@ -180,6 +155,10 @@ button:hover {
   opacity: 0;
 }
 
+.hide-display{
+  display: none;
+} 
+
 
 @media (max-width: 480px) {
   .bucket {
@@ -194,5 +173,14 @@ button:hover {
 
   header{
     font-size:24px ;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

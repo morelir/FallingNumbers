@@ -5,16 +5,10 @@ import { createNext, nextNumber, stepNextNumber } from "./nextNumber.js";
 loadGame();
 
 function loadGame() {
-  const button = document.createElement("button");
-  button.textContent = "Start Game";
-  const main = document.querySelector("main");
-  main.appendChild(button);
-  const rules = document.createElement("p");
-  rules.textContent =
-    "Numbers will fall... drag the bucket and catch numbers from 1 to 10 in sequential order";
-  main.appendChild(rules);
+  const button = document.querySelector(".start-screen button");
   button.addEventListener("click", function startIt(e) {
-    main.textContent = "";
+    document.querySelector(".start-screen").classList.add("hide-display");
+    document.querySelector(".game-screen").classList.remove("hide-display");
     playGame();
   });
 }
@@ -23,11 +17,10 @@ function playGame() {
   const intervalIds = [];
   const animations = {};
   const game = { isOn: true };
-  const main = document.querySelector("main");
-  const header = document.querySelector("header");
-  const bucket = createBucket(main);
+  const gameScreen = document.querySelector(".game-screen");
+  const bucket = createBucket(gameScreen);
   createNext();
-  fallingNumbers(main, game, animations);
+  fallingNumbers(gameScreen, game, animations);
 
   //Periodically checking collision between dynamic falling numbers elements and bucket element
   intervalIds.push(
@@ -44,7 +37,7 @@ function playGame() {
         const targetText = target.querySelector("span");
         const num = +targetText.textContent;
         if (nextNumber !== num) {
-          return gameOver();
+          return end();
         } else if (num === 10) {
           return win();
         }
@@ -77,43 +70,65 @@ function playGame() {
   );
 
   function cleanupHiddens() {
-    [...main.querySelectorAll(".hidden")].forEach(function (hidden) {
-      main.removeChild(hidden);
+    [...gameScreen.querySelectorAll(".hidden")].forEach(function (hidden) {
+      gameScreen.removeChild(hidden);
     });
   }
 
   function win() {
-    gameIsEnded("You Win!");
-  }
-
-  function gameOver() {
-    gameIsEnded("Game Over");
-  }
-
-  //Clear resources and show end game screen
-  function gameIsEnded(text) {
     game.isOn = false;
+    gameScreen.textContent=""
+    gameScreen.classList.add('hide-display')
+    clearGameResources();
+    showWinScreen();
+  }
+
+  function end() {
+    game.isOn = false;
+    gameScreen.textContent=""
+    gameScreen.classList.add('hide-display')
+    clearGameResources();
+    showEndScreen();
+  }
+
+  function showWinScreen() {
+    const winScreen = document.querySelector(".win-screen");
+    winScreen.classList.remove("hide-display");
+    const button = winScreen.querySelector("button");
+    button.addEventListener("click",clickHandler)
+    function clickHandler() {
+      winScreen.classList.add("hide-display");
+      gameScreen.classList.remove('hide-display')
+      removeAllListeners(button);
+      playGame();
+    }
+  }
+
+  function showEndScreen() {
+    const endScreen = document.querySelector(".end-screen");
+    endScreen.classList.remove("hide-display");
+    const button = endScreen.querySelector("button");
+    button.addEventListener("click",clickHandler)
+    function clickHandler() {
+      endScreen.classList.add("hide-display");
+      gameScreen.classList.remove('hide-display')
+      removeAllListeners(button);
+      playGame();
+    }
+  }
+
+  function clearGameResources() {
     for (let i = 0; i < intervalIds.length; i++) {
       clearInterval(intervalIds[i]);
     }
     document.getAnimations().forEach(function (anim) {
       anim.pause();
     });
-
-    const endGame = document.querySelector(".end-game");
-    endGame.classList.add("indeed");
-    main.textContent = "";
-    header.textContent = "";
-    const p = document.createElement("p");
-    p.textContent = text;
-    const button = document.createElement("button");
-    button.textContent = "Start Again";
-    endGame.append(p, button);
-
-    button.addEventListener("click", function () {
-      endGame.classList.remove("indeed");
-      endGame.textContent = "";
-      playGame();
-    });
   }
+  
+}
+
+function removeAllListeners(element) {
+  const newElement = element.cloneNode(true);
+  element.replaceWith(newElement);
 }

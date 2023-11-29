@@ -7,9 +7,22 @@
     <title>Falling Numbers</title>
   </head>
   <body>
-    <header></header>
-    <div class="end-game"></div>
-    <main></main>
+    <header>
+      <p class="next-number hide-display">Next: <span></span></p>
+    </header>
+    <div class="start-screen">
+      <button>Start Game</button>
+      <p>Numbers will fall... drag the bucket and catch numbers from 1 to 10 in sequential order</p>
+    </div>
+    <main class="game-screen hide-display"></main>
+    <div class="win-screen hide-display">
+      <p>You Win</p>
+      <button>Start Again</button>
+    </div>
+    <div class="end-screen hide-display">
+      <p>Game Over!</p>
+      <button>Start Again</button>
+    </div>
     <footer></footer>
     <script type="module" src="script/game.js"></script>
   </body>
