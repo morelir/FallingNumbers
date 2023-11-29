@@ -116,6 +116,7 @@ main > div > span b {
 
 
 button {
+  cursor: pointer;
   appearance: none;
   border-radius: 0;
   background: transparent;
