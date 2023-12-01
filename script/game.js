@@ -1,3 +1,4 @@
+import { createTimer} from "./timer.js";
 import { createBucket } from "./bucket.js";
 import { fallingNumbers } from "./fallingNumbers.js";
 import { createNext, nextNumber, stepNextNumber } from "./nextNumber.js";
@@ -18,9 +19,14 @@ function playGame() {
   const animations = {};
   const game = { isOn: true };
   const gameScreen = document.querySelector(".game-screen");
+  const winScreen = document.querySelector(".win-screen");
+  const endScreen = document.querySelector(".end-screen");
   const bucket = createBucket(gameScreen);
   createNext();
+  createTimer(intervalIds)
   fallingNumbers(gameScreen, game, animations);
+
+  
 
   //Periodically checking collision between dynamic falling numbers elements and bucket element
   intervalIds.push(
@@ -92,7 +98,6 @@ function playGame() {
   }
 
   function showWinScreen() {
-    const winScreen = document.querySelector(".win-screen");
     winScreen.classList.remove("hide-display");
     const button = winScreen.querySelector("button");
     button.addEventListener("click",clickHandler)
@@ -105,7 +110,6 @@ function playGame() {
   }
 
   function showEndScreen() {
-    const endScreen = document.querySelector(".end-screen");
     endScreen.classList.remove("hide-display");
     const button = endScreen.querySelector("button");
     button.addEventListener("click",clickHandler)

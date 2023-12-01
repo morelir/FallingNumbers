@@ -60,6 +60,10 @@ header .next-number {
   margin: 0;
   margin-left: 1vh;
 }
+header .timer {
+  margin: 0;
+  margin-left: 1vh;
+}
 
 footer {
   display: flex;
