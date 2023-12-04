@@ -12,11 +12,9 @@ export function createBucket(container) {
   function handleDragStart(e) {
     e.preventDefault(); // Prevent default behavior for both mouse and touch events
     isDragging = true;
+    
     if (e.type === "mousedown") {
-      offset = [
-        bucket.offsetLeft - e.clientX,
-        bucket.offsetTop - e.clientY,
-      ];
+      offset = [bucket.offsetLeft - e.clientX, bucket.offsetTop - e.clientY];
     } else if (e.type === "touchstart" && e.touches.length === 1) {
       offset = [
         bucket.offsetLeft - e.touches[0].clientX,
@@ -51,22 +49,22 @@ export function createBucket(container) {
 
     if (
       // cursor inside horizontal and vertical boundaries of the container
-      cursorInVerticalBoundaries(x, bucketRect) &&
-      cursorInHorizontalBoundaries(y, bucketRect)
+      cursorInHorizontalBoundaries(x, bucketRect) &&
+      cursorInVerticalBoundaries(y, bucketRect)
     ) {
       bucket.style.left = x + offset[0] + "px";
       bucket.style.top = y + offset[1] + "px";
     } else {
       if (
         // cursor outside vertical boundaries, and inside horizontal boundaries of the container
-        cursorInHorizontalBoundaries(y, bucketRect) &&
-        !cursorInVerticalBoundaries(x, bucketRect)
+        cursorInVerticalBoundaries(y, bucketRect) &&
+        !cursorInHorizontalBoundaries(x, bucketRect)
       ) {
         bucket.style.top = y + offset[1] + "px";
       } else if (
         // cursor outside horizontal boundaries, and inside vertical boundaries of the container
-        cursorInVerticalBoundaries(x, bucketRect) &&
-        !cursorInHorizontalBoundaries(y, bucketRect)
+        cursorInHorizontalBoundaries(x, bucketRect) &&
+        !cursorInVerticalBoundaries(y, bucketRect)
       ) {
         bucket.style.left = x + offset[0] + "px";
       }
@@ -85,7 +83,7 @@ export function createBucket(container) {
   }
 
   // check if cursor inside vertical boundaries of the container
-  function cursorInVerticalBoundaries(mouseX, bucketRect) {
+  function cursorInHorizontalBoundaries(mouseX, bucketRect) {
     return (
       mouseX - (bucket.offsetLeft - offset[0] - bucketRect.left) >=
         containerRect.left &&
@@ -95,7 +93,7 @@ export function createBucket(container) {
   }
 
   // check if cursor inside horizontal boundaries of the container
-  function cursorInHorizontalBoundaries(mouseY, bucketRect) {
+  function cursorInVerticalBoundaries(mouseY, bucketRect) {
     return (
       mouseY - (bucket.offsetTop - offset[1] - bucketRect.top) >=
         containerRect.top &&

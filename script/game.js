@@ -26,10 +26,7 @@ function playGame() {
   // const timer = new SimpleTimer(intervalIds);
   // timer.start();
   createTimer(intervalIds)
-
   fallingNumbers(gameScreen, game, animations);
-
-  
 
   //Periodically checking collision between dynamic falling numbers elements and bucket element
   intervalIds.push(
