@@ -12,7 +12,7 @@ export function createBucket(container) {
   function handleDragStart(e) {
     e.preventDefault(); // Prevent default behavior for both mouse and touch events
     isDragging = true;
-    
+
     if (e.type === "mousedown") {
       offset = [bucket.offsetLeft - e.clientX, bucket.offsetTop - e.clientY];
     } else if (e.type === "touchstart" && e.touches.length === 1) {
@@ -48,7 +48,7 @@ export function createBucket(container) {
     }
 
     if (
-      // cursor inside horizontal and vertical boundaries of the container
+      // The cursor is inside horizontal and vertical boundaries of the container
       cursorInHorizontalBoundaries(x, bucketRect) &&
       cursorInVerticalBoundaries(y, bucketRect)
     ) {
@@ -56,17 +56,33 @@ export function createBucket(container) {
       bucket.style.top = y + offset[1] + "px";
     } else {
       if (
-        // cursor outside vertical boundaries, and inside horizontal boundaries of the container
-        cursorInVerticalBoundaries(y, bucketRect) &&
-        !cursorInHorizontalBoundaries(x, bucketRect)
+        // The cursor is inside vertical boundaries , and outside one of horizontal boundaries of the container
+        cursorInVerticalBoundaries(y, bucketRect)
       ) {
+        bucket.style.left =
+          (cursorWithinLeftBoundary(x, bucketRect)
+            ? containerRect.width - bucketRect.width
+            : 0) + "px";
         bucket.style.top = y + offset[1] + "px";
       } else if (
-        // cursor outside horizontal boundaries, and inside vertical boundaries of the container
-        cursorInHorizontalBoundaries(x, bucketRect) &&
-        !cursorInVerticalBoundaries(y, bucketRect)
+        // The cursor is inside horizontal boundaries, and outside one of vertical boundaries of the container
+        cursorInHorizontalBoundaries(x, bucketRect)
       ) {
+        bucket.style.top =
+          (cursorWithinTopBoundary(y, bucketRect)
+            ? containerRect.height - bucketRect.height
+            : 0) + "px";
         bucket.style.left = x + offset[0] + "px";
+      } else {
+        // The cursor is neither within the horizontal boundaries nor the vertical boundaries of the container.
+        bucket.style.left =
+          (cursorWithinLeftBoundary(x, bucketRect)
+            ? containerRect.width - bucketRect.width
+            : 0) + "px";
+        bucket.style.top =
+          (cursorWithinTopBoundary(y, bucketRect)
+            ? containerRect.height - bucketRect.height
+            : 0) + "px";
       }
     }
   }
@@ -82,23 +98,47 @@ export function createBucket(container) {
     document.removeEventListener("touchend", handleDragEnd);
   }
 
-  // check if cursor inside vertical boundaries of the container
+  // check if cursor is inside horizontal boundaries of the container
   function cursorInHorizontalBoundaries(mouseX, bucketRect) {
     return (
-      mouseX - (bucket.offsetLeft - offset[0] - bucketRect.left) >=
-        containerRect.left &&
-      mouseX + (bucketRect.right - bucket.offsetLeft + offset[0]) <=
-        containerRect.right
+      cursorWithinLeftBoundary(mouseX, bucketRect) &&
+      cursorWithinRightBoundary(mouseX, bucketRect)
     );
   }
 
-  // check if cursor inside horizontal boundaries of the container
+  function cursorWithinLeftBoundary(mouseX, bucketRect) {
+    return (
+      mouseX - (bucket.offsetLeft - offset[0] - bucketRect.left) >=
+      containerRect.left
+    );
+  }
+
+  function cursorWithinRightBoundary(mouseX, bucketRect) {
+    return (
+      mouseX + (bucketRect.right - bucket.offsetLeft + offset[0]) <=
+      containerRect.right
+    );
+  }
+
+  // check if cursor is inside vertical boundaries of the container
   function cursorInVerticalBoundaries(mouseY, bucketRect) {
     return (
+      cursorWithinTopBoundary(mouseY, bucketRect) &&
+      cursorWithinBottomBoundary(mouseY, bucketRect)
+    );
+  }
+
+  function cursorWithinTopBoundary(mouseY, bucketRect) {
+    return (
       mouseY - (bucket.offsetTop - offset[1] - bucketRect.top) >=
-        containerRect.top &&
+      containerRect.top
+    );
+  }
+
+  function cursorWithinBottomBoundary(mouseY, bucketRect) {
+    return (
       mouseY + (bucketRect.bottom - bucket.offsetTop + offset[1]) <=
-        containerRect.bottom
+      containerRect.bottom
     );
   }
 

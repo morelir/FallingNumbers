@@ -59,7 +59,6 @@ function playGame() {
   function detectCollision(bucket, fallingNumber) {
     const bucketRect = bucket.getBoundingClientRect();
     const fallingNumberRect = fallingNumber.getBoundingClientRect();
-
     return (
       bucketRect.top < fallingNumberRect.bottom &&
       bucketRect.bottom > fallingNumberRect.top &&

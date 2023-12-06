@@ -23,6 +23,26 @@ main {
   animation: fadeIn 500ms ease-in-out;
 }
 
+main > div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-transform: uppercase;
+  perspective: 300px;
+  transition: opacity 0.7s ease-out;
+  font-size: 4vh;
+}
+
+main > div > span {
+  display: block;
+  animation: waver 2s infinite alternate ease-in-out;
+  perspective: 300px;
+}
+main > div > span b {
+  display: block;
+  transition: opacity 0s linear;
+}
+
 .start-screen,.win-screen,.end-screen{
   position: relative;
   flex: 1;
@@ -97,26 +117,7 @@ footer button:active {
 .playing footer button {
   display: block;
 }
-main > div {
-  position: absolute;
-  top: 5vh;
-  left: 0;
-  text-transform: uppercase;
-  perspective: 300px;
-  transition: opacity 0.7s ease-out;
-  font-size: 4vh;
-}
 
-main > div > span {
-  position: absolute;
-  display: block;
-  animation: waver 2s infinite alternate ease-in-out;
-  perspective: 300px;
-}
-main > div > span b {
-  display: block;
-  transition: opacity 0s linear;
-}
 
 
 button {
@@ -145,11 +146,11 @@ button:hover {
 
 .bucket {
   position: absolute;
-  left: 50%;
-  top: 100%;
+  left: 49%;
+  top: 88%;
   width: 8vh;
   height: 8vh;
-  transform: translate(-50%, -100%);
+  /* transform: translate(-50%, -100%); */
   background: url(./images/bucket.png);
   background-size: 8vh 8vh;
   z-index: 1;
