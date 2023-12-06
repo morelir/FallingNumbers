@@ -4,10 +4,10 @@ let ROUND_INTERVAL = 0; //Interval between rounds
 let X_AXIS_POINTS = []
 let NUMBER_OF_FALLING_NUMBERS = 0
 
-function generate_x_axis_points(){
+function generate_x_axis_points(xMax){
   const pointsX=[]
-  for(let i=0;i<=98;i+=Math.floor(Math.random()*5)+2){
-    pointsX.push(i+"vw")
+  for(let i=0;i<=xMax;i+=Math.floor(Math.random()*5)+50){
+    pointsX.push(i+"px")
   }
   return pointsX
 }
@@ -15,10 +15,10 @@ function generate_x_axis_points(){
 //start the numbers falling
 export function fallingNumbers(container, game, animations) {
   if (game.isOn) {
-    X_AXIS_POINTS = generate_x_axis_points()
+    const containerWidth = container.getBoundingClientRect().width
+    X_AXIS_POINTS = generate_x_axis_points(containerWidth-40)
     NUMBER_OF_FALLING_NUMBERS=X_AXIS_POINTS.length
     ROUND_INTERVAL=X_AXIS_POINTS.length*100+1000
-    // console.log(X_AXIS_POINTS.length,ROUND_INTERVAL)
     for (let i = 0; i < NUMBER_OF_FALLING_NUMBERS; i++) {
       setTimeout(() => {
         if (game.isOn) {
@@ -35,7 +35,6 @@ export function fallingNumbers(container, game, animations) {
 //Create a number element and setup its falling animation, add the animation to the active animation array
 export function createNumber(container, animations) {
   const elementId = Date.now();
-  console.log("asd")
   const xIdx =  Math.floor(Math.random() * X_AXIS_POINTS.length);
   const [x]=X_AXIS_POINTS.splice(xIdx,1)
   const numContainer = document.createElement("div");
