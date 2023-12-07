@@ -1,12 +1,12 @@
 const DURATION = 3000; //Fall animation duration
 let ROUND_INTERVAL = 0; //Interval between rounds
-// const NUMBER_OF_FALLING_NUMBERS = window.innerWidth > 480 ? 40 : 8; //Number of falling numbers each round
+const INTERVAL_BETWEEN_NUMS = window.innerWidth > 800 ? 100 : 200; //Interval between numbers
 let X_AXIS_POINTS = []
 let NUMBER_OF_FALLING_NUMBERS = 0
 
 function generate_x_axis_points(xMax){
-  const pointsX=[]
-  for(let i=0;i<=xMax;i+=Math.floor(Math.random()*5)+50){
+  const pointsX=[];
+  for(let i=0;i<=xMax;i+=Math.floor(Math.random()*70)+20){
     pointsX.push(i+"px")
   }
   return pointsX
@@ -18,13 +18,13 @@ export function fallingNumbers(container, game, animations) {
     const containerWidth = container.getBoundingClientRect().width
     X_AXIS_POINTS = generate_x_axis_points(containerWidth-40)
     NUMBER_OF_FALLING_NUMBERS=X_AXIS_POINTS.length
-    ROUND_INTERVAL=X_AXIS_POINTS.length*100+1000
+    ROUND_INTERVAL=X_AXIS_POINTS.length*INTERVAL_BETWEEN_NUMS+1000
     for (let i = 0; i < NUMBER_OF_FALLING_NUMBERS; i++) {
       setTimeout(() => {
         if (game.isOn) {
           createNumber(container, animations);
         }
-      }, 100 * i);
+      }, INTERVAL_BETWEEN_NUMS * i);
     }
     setTimeout(function () { //Next round
       fallingNumbers(container, game, animations);

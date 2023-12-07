@@ -3,6 +3,8 @@ html{
   display: flex;
   justify-content: center;
   align-items: center;
+  background-image: url(/images/background.jpg);
+  background-size: cover;
 }
 body {
   height: 80vh;
@@ -16,6 +18,8 @@ body {
   font-family: monospace;
   font-size: 5vh;
   position: relative;
+  border:4px solid #aa6657;
+  background-color: white;
 }
 
 main {
@@ -38,7 +42,7 @@ main > div {
   perspective: 300px;
   transition: opacity 0.7s ease-out;
   font-size: 3vh;
-
+  
 }
 
 main > div > span {

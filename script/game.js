@@ -1,4 +1,3 @@
-import { SimpleTimer,createTimer} from "./timer.js";
 import { createBucket } from "./bucket.js";
 import { fallingNumbers } from "./fallingNumbers.js";
 import { createNext, nextNumber, stepNextNumber } from "./nextNumber.js";
@@ -23,9 +22,6 @@ function playGame() {
   const endScreen = document.querySelector(".end-screen");
   const bucket = createBucket(gameScreen);
   createNext();
-  // const timer = new SimpleTimer(intervalIds);
-  // timer.start();
-  createTimer(intervalIds)
   fallingNumbers(gameScreen, game, animations);
 
   //Periodically checking collision between dynamic falling numbers elements and bucket element
