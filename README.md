@@ -1,5 +1,5 @@
 <h1 align="center" style="border-bottom: none">Falling Numbers</h1>
-<p align="center">🎉 The app is live, try it <a href="https://6572e2241b47176ac84c4807--precious-semifreddo-5bc690.netlify.app" target="_blank">here</a>. </p> 
+<p align="center">🎉 The app is live, try it <a href="https://falling-numbers-game.netlify.app" target="_blank">here</a>. </p> 
 
 ## Game Concept
 
